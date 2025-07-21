@@ -91,4 +91,4 @@ After setting up authentication, you can:
 2. Create additional protected routes
 3. Implement role-based access control
 4. Add more OAuth providers (GitHub, Facebook, etc.)
-5. Build your application features 
+5. Build your application Features   
