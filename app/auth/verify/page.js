@@ -1,8 +1,8 @@
 'use client';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 
-export default function VerifyPage() {
+function VerifyPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
@@ -76,5 +76,13 @@ export default function VerifyPage() {
         {resending ? 'Resending...' : 'Resend OTP'}
       </button>
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense>
+      <VerifyPageInner />
+    </Suspense>
   );
 } 

@@ -1,6 +1,6 @@
 'use client';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
 const modules = [
@@ -49,7 +49,7 @@ function ModuleContent({ module, navKey, user }) {
   );
 }
 
-export default function Dashboard() {
+function DashboardInner() {
   const { data: session, status } = useSession();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -168,5 +168,13 @@ export default function Dashboard() {
         <ModuleContent module={selectedModule} navKey={selectedNav} user={displayName} />
       </main>
     </div>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <Suspense>
+      <DashboardInner />
+    </Suspense>
   );
 } 
