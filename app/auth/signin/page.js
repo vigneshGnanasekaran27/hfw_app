@@ -1,23 +1,44 @@
 'use client';
 
 import { signIn, getSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function SignIn() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const [email, setEmail] = useState("");
+  const [emailSent, setEmailSent] = useState(false);
+  const [error, setError] = useState("");
+
+  // Always use callbackUrl from query string if present
+  const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
   useEffect(() => {
     // Check if user is already signed in
     getSession().then((session) => {
       if (session) {
-        router.push('/dashboard');
+        router.push(callbackUrl);
       }
     });
-  }, [router]);
+    // eslint-disable-next-line
+  }, [router, callbackUrl]);
 
   const handleGoogleSignIn = () => {
-    signIn('google', { callbackUrl: '/dashboard' });
+    signIn('google', { callbackUrl });
+  };
+
+  const handleEmailSignIn = async (e) => {
+    e.preventDefault();
+    setError("");
+    setEmailSent(false);
+    const res = await signIn("email", { email, callbackUrl, redirect: false });
+    if (res?.ok) {
+      // Redirect to verify page with email and callbackUrl in URL
+      router.push(`/auth/verify?email=${encodeURIComponent(email)}&callbackUrl=${encodeURIComponent(callbackUrl)}`);
+    } else {
+      setError("Failed to send OTP. Please try again.");
+    }
   };
 
   return (
@@ -32,6 +53,27 @@ export default function SignIn() {
           </p>
         </div>
         <div className="mt-8 space-y-6">
+          <form onSubmit={handleEmailSignIn} className="space-y-4">
+            <input
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              required
+              className="w-full px-3 py-2 border rounded-md text-black"
+            />
+            <button
+              type="submit"
+              className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            >
+              Send OTP
+            </button>
+            {emailSent && <p className="text-green-600">OTP sent! Check your email.</p>}
+            {error && <p className="text-red-600">{error}</p>}
+          </form>
+          <div className="flex items-center justify-center">
+            <span className="text-gray-500">or</span>
+          </div>
           <div>
             <button
               onClick={handleGoogleSignIn}
