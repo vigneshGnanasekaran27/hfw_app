@@ -1,8 +1,50 @@
-export default function KitchenPage() {
+"use client";
+import { useSession, signIn } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import KitchenPage from "@/app/components/KitchenPage.jsx";
+
+function Navbar({ onSignIn }) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold mb-4">Kitchen Module</h1>
-      <p className="text-gray-700">Phone OTP authentication coming soon.</p>
-    </div>
+    <nav className="w-full flex items-center justify-between px-6 py-4 bg-white shadow-md fixed top-0 left-0 z-50">
+      <div className="text-xl font-bold text-purple-700">HopeFit Kitchen</div>
+      <div>
+        <button
+          onClick={onSignIn}
+          className="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors"
+        >
+          Sign In
+        </button>
+      </div>
+    </nav>
   );
-} 
+}
+
+export default function Page() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/dashboard?module=kitchen");
+    }
+  }, [status, router]);
+
+  if (status === "loading") {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+
+  if (status === "unauthenticated") {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <Navbar onSignIn={() => signIn(undefined, { callbackUrl: "/dashboard?module=kitchen" })} />
+        <div className="pt-12">
+          <KitchenPage />
+        </div>
+      </div>
+    );
+  }
+
+  // If authenticated, the user will be redirected
+  return null;
+}

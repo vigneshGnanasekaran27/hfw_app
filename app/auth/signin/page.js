@@ -21,6 +21,8 @@ function SignInInner() {
         router.push(callbackUrl);
       }
     });
+
+    
     // eslint-disable-next-line
   }, [router, callbackUrl]);
 
@@ -34,10 +36,9 @@ function SignInInner() {
     setEmailSent(false);
     const res = await signIn("email", { email, callbackUrl, redirect: false });
     if (res?.ok) {
-      // Redirect to verify page with email and callbackUrl in URL
-      router.push(`/auth/verify?email=${encodeURIComponent(email)}&callbackUrl=${encodeURIComponent(callbackUrl)}`);
+      setEmailSent(true);
     } else {
-      setError("Failed to send OTP. Please try again.");
+      setError("Failed to send login link. Please try again.");
     }
   };
 
@@ -66,9 +67,9 @@ function SignInInner() {
               type="submit"
               className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              Send OTP
+              Send Login Link
             </button>
-            {emailSent && <p className="text-green-600">OTP sent! Check your email.</p>}
+            {emailSent && <p className="text-green-600">Login link sent! Check your email.</p>}
             {error && <p className="text-red-600">{error}</p>}
           </form>
           <div className="flex items-center justify-center">

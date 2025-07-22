@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
-import { getSession } from 'next-auth/react';
 
 const modules = [
   { name: "Events", key: "events", description: "Manage and view events." },
@@ -14,14 +13,8 @@ const modules = [
 export default function Home() {
   const router = useRouter();
 
-  const handleModuleClick = async (modKey) => {
-    const session = await getSession();
-    const dashboardUrl = `/dashboard?module=${modKey}`;
-    if (session) {
-      router.push(dashboardUrl);
-    } else {
-      router.push(`/auth/signin?callbackUrl=${encodeURIComponent(dashboardUrl)}`);
-    }
+  const handleModuleClick = (modKey) => {
+    router.push(`/${modKey}`);
   };
 
   return (

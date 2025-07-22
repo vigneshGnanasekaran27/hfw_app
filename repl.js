@@ -11,4 +11,7 @@ server.on('exit', async () => {
   process.exit();
 });
 
+
+
+
 console.log(Object.keys(prisma).filter(k => typeof prisma[k]?.findMany === 'function'));

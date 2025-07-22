@@ -2,6 +2,10 @@
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useEffect, useState, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
+import KitchenPage from "@/app/components/KitchenPage.jsx";
+import EventsPage from "@/app/components/EventsPage.jsx";
+import ShopPage from "@/app/components/ShopPage.jsx";
+import TrainingPage from "@/app/components/TrainingPage.jsx";
 
 const modules = [
   { name: 'Events', key: 'events' },
@@ -41,6 +45,18 @@ function getDisplayName(user) {
 
 function ModuleContent({ module, navKey, user }) {
   if (!navKey) return <div><h2 className="text-xl font-bold mb-2 text-purple-800">Select an option from the sidebar.</h2></div>;
+  if (module === "kitchen" && navKey === "recipes") {
+    return <KitchenPage />;
+  }
+  if (module === "events" && navKey === "all-events") {
+    return <EventsPage />;
+  }
+  if (module === "shop" && navKey === "products") {
+    return <ShopPage />;
+  }
+  if (module === "training" && navKey === "courses") {
+    return <TrainingPage />;
+  }
   return (
     <div>
       <h2 className="text-xl font-bold mb-2 text-purple-800">{modules.find(m => m.key === module)?.name} - {moduleNav[module].find(n => n.key === navKey)?.label}</h2>
