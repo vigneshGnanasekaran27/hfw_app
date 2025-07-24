@@ -1,5 +1,2 @@
-import KitchenPage from "@/app/components/KitchenPage.jsx";
-
-export default function DashboardKitchenPage() {
-  return <KitchenPage />;
-} 
+import KitchenPage from "@/components/KitchenPage";
+export default KitchenPage; 

@@ -1,4 +1,3 @@
-"use client";
 import TrainingPage from "@/components/TrainingPage";
 
-export default TrainingPage;
+export default TrainingPage; 

@@ -1,13 +1,11 @@
 "use client";
 import React, { useState, useMemo } from "react";
 import { ChefHat, Search, ShoppingCart, CreditCard } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 export default function KitchenPage() {
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const router = useRouter();
 
   const meals = {
     breakfast: [
@@ -140,8 +138,6 @@ export default function KitchenPage() {
   // Filter meals based on search query, category, and meal time
   const filteredMeals = useMemo(() => {
     let filtered = activeTab === "all" ? allMeals : meals[activeTab];
-
-    // Filter by category and search query
     if (searchQuery || selectedCategory !== "all") {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter((meal) => {
@@ -152,11 +148,9 @@ export default function KitchenPage() {
           meal.title.toLowerCase().includes(query) ||
           meal.description.toLowerCase().includes(query) ||
           meal.tags.some((tag) => tag.toLowerCase().includes(query));
-
         return matchesCategory && matchesSearch;
       });
     }
-
     return filtered;
   }, [activeTab, selectedCategory, searchQuery, allMeals]);
 
@@ -190,9 +184,7 @@ export default function KitchenPage() {
             {meal.preparationTime}
           </span>
         </div>
-
         <p className="text-gray-600 mb-4">{meal.description}</p>
-
         <div className="flex gap-2 mb-4 flex-wrap">
           {meal.tags.map((tag) => (
             <span
@@ -203,7 +195,6 @@ export default function KitchenPage() {
             </span>
           ))}
         </div>
-
         <div className="grid grid-cols-3 text-center bg-gray-50 rounded-lg p-4 mb-4">
           <div className="border-r border-gray-200">
             <span className="font-bold block text-lg">
@@ -222,21 +213,20 @@ export default function KitchenPage() {
             <span className="text-xs text-gray-500">Fat</span>
           </div>
         </div>
-
         <div className="flex items-center justify-between mb-4">
           <div className="text-2xl font-bold text-gray-900">
             ${(meal.price / 100).toFixed(2)}
           </div>
           <div className="flex gap-2">
             <button
-              onClick={() => router.push("/kitchen/cart")}
+              // ... keep your cart/order logic here ...
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
             >
               <ShoppingCart className="w-4 h-4" />
               Add to Cart
             </button>
             <button
-              onClick={() => router.push("/kitchen/order")}
+              // ... keep your cart/order logic here ...
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors"
             >
               <CreditCard className="w-4 h-4" />
@@ -264,7 +254,6 @@ export default function KitchenPage() {
           </p>
         </div>
       </div>
-
       {/* Unified Search and Filter Section */}
       <div className="container mx-auto px-4 py-8">
         <div className="bg-white p-6 rounded-xl shadow-sm mb-8">
@@ -302,7 +291,6 @@ export default function KitchenPage() {
             </div>
           </div>
         </div>
-
         {/* Tabs Section */}
         <div className="mb-8">
           <div className="flex justify-center space-x-2 border-b border-gray-200 overflow-x-auto">
@@ -323,13 +311,11 @@ export default function KitchenPage() {
             ))}
           </div>
         </div>
-
         {/* Results Count */}
         <div className="mb-6 text-gray-600">
           Showing {filteredMeals.length}{" "}
           {filteredMeals.length === 1 ? "meal" : "meals"}
         </div>
-
         {/* Meals Grid */}
         {filteredMeals.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

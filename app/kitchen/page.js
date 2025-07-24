@@ -1,50 +1,19 @@
 "use client";
-import { useSession, signIn } from "next-auth/react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import KitchenPage from "@/app/components/KitchenPage.jsx";
+import React, { useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import KitchenPage from "@/components/KitchenPage";
 
-function Navbar({ onSignIn }) {
-  return (
-    <nav className="w-full flex items-center justify-between px-6 py-4 bg-white shadow-md fixed top-0 left-0 z-50">
-      <div className="text-xl font-bold text-purple-700">HopeFit Kitchen</div>
-      <div>
-        <button
-          onClick={onSignIn}
-          className="px-4 py-2 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors"
-        >
-          Sign In
-        </button>
-      </div>
-    </nav>
-  );
-}
-
-export default function Page() {
-  const { data: session, status } = useSession();
+export default function KitchenPageWithRedirect(props) {
   const router = useRouter();
+  const pathname = usePathname();
+  const { status } = useSession();
 
   useEffect(() => {
-    if (status === "authenticated") {
-      router.replace("/dashboard?module=kitchen");
+    if (status === "authenticated" && pathname.startsWith("/kitchen")) {
+      router.replace(`/dashboard${pathname}`);
     }
-  }, [status, router]);
+  }, [status, pathname, router]);
 
-  if (status === "loading") {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-  }
-
-  if (status === "unauthenticated") {
-    return (
-      <div className="min-h-screen bg-gray-50 pt-20">
-        <Navbar onSignIn={() => signIn(undefined, { callbackUrl: "/dashboard?module=kitchen" })} />
-        <div className="pt-12">
-          <KitchenPage />
-        </div>
-      </div>
-    );
-  }
-
-  // If authenticated, the user will be redirected
-  return null;
-}
+  return <KitchenPage {...props} />;
+} 

@@ -74,11 +74,9 @@ export default function EventsPage() {
 
   // Filtering logic
   const filteredEvents = dummyEvents.filter((event) => {
-    // Search
     const matchesSearch =
       event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       event.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    // Category (date)
     let matchesCategory = true;
     if (selectedCategory !== "all") {
       const today = new Date();
@@ -95,17 +93,13 @@ export default function EventsPage() {
         matchesCategory = eventDate >= today && eventDate <= monthFromNow;
       }
     }
-    // Type
     const matchesType =
       selectedType === "all" || event.event_type === selectedType;
-    // Level
     const matchesLevel =
       selectedLevel === "all" || event.level === selectedLevel;
-    // Paid/Free
     const matchesPaid =
       selectedPaid === "all" ||
       (selectedPaid === "paid" ? event.paid : !event.paid);
-    // Place
     const matchesPlace =
       selectedPlace === "all" || event.location === selectedPlace;
     return (
@@ -229,8 +223,7 @@ export default function EventsPage() {
 
       {/* Results Count */}
       <div className="mb-6 text-gray-600">
-        Showing {filteredEvents.length}{" "}
-        {filteredEvents.length === 1 ? "event" : "events"}
+        Showing {filteredEvents.length} {filteredEvents.length === 1 ? "event" : "events"}
       </div>
 
       {/* Events Grid */}
