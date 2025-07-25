@@ -1,11 +1,13 @@
 import React from "react";
 
-const SelectInput = ({ label, register, name, options, error, required, ...props }) => (
+const SelectInput = ({ label, register, name, options, error, required, noLabel, ...props }) => (
   <div>
-    <label htmlFor={name} className="block text-sm font-medium mb-1">
-      {label}
-      {required && <span className="text-red-500">*</span>}
-    </label>
+    {!noLabel && (
+      <label htmlFor={name} className="block text-sm font-medium mb-1">
+        {label}
+        {required && <span className="text-red-500">*</span>}
+      </label>
+    )}
     <select
       id={name}
       {...register(name)}

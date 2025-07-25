@@ -1,11 +1,13 @@
 import React from "react";
 
-const TextInput = ({ label, register, name, error, required, ...props }) => (
+const TextInput = ({ label, register, name, error, required, noLabel, ...props }) => (
   <div>
-    <label htmlFor={name} className="block text-sm font-medium mb-1">
-      {label}
-      {required && <span className="text-red-500">*</span>}
-    </label>
+    {!noLabel && (
+      <label htmlFor={name} className="block text-sm font-medium mb-1">
+        {label}
+        {required && <span className="text-red-500">*</span>}
+      </label>
+    )}
     <input
       id={name}
       {...register(name)}

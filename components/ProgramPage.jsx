@@ -64,7 +64,10 @@ const ProgramPage = ({ params }) => {
       program: slugify(program.title),
     }).toString();
 
-    window.location.href = `/join/${queryParams}`;
+    // If in dashboard context, prefix with /dashboard
+    const isDashboard = pathname.startsWith("/dashboard");
+    const joinUrl = `${isDashboard ? "/dashboard" : ""}/join/${queryParams}`;
+    window.location.href = joinUrl;
   };
 
   return (
@@ -75,9 +78,7 @@ const ProgramPage = ({ params }) => {
             <Image
               src={program.image}
               alt={program.title}
-              fill
-              width={500}
-              height={300}
+              layout="fill"
               className="object-cover"
               sizes="100vw"
             />
